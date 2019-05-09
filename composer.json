@@ -1,0 +1,25 @@
+{
+    "name": "glue-agency/craft-varnishpurge",
+    "description": "A plugin that lets you purge varnish cache",
+    "type": "craft-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Niels Claes",
+            "email": "niels@glue.be"
+        }
+    ],
+    "require": {
+        "jeslopcru/varnishadmin": "dev-master",
+        "craftcms/cms": "^3.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "GlueAgency\\VarnishPurge\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "varnishpurge",
+        "name": "VarnishPurge"
+    }
+}

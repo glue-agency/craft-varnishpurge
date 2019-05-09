@@ -1,0 +1,13 @@
+{% extends "_layouts/cp" %}
+{% set title = "Purge the Varnish cache"|t('varnishpurge') %}
+
+{% block content %}
+
+    <form method="post" action="varnishpurge/purge" accept-charset="UTF-8">
+        {{ csrfInput() }}
+        <label for="url">URL to purge:</label><br/>
+        <input id="url" type="text" name="url" value=""><br/><br/>
+        <input type="submit" value="Purge now!">
+    </form>
+
+{% endblock %}
