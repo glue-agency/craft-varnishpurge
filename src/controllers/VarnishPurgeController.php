@@ -21,7 +21,8 @@ class VarnishPurgeController extends Controller
         if(!empty($secret)){
             $varnish->setSecret($secret);
         }
-        $test = $varnish->purgeUrl($_POST['url']);
+        $varnish->connect();
+        $varnish->purgeUrl($_POST['url']);
         $varnish->quit();
 
         Craft::$app->session->setFlash('notice',"URL purge complete: ".$_POST['url']);
