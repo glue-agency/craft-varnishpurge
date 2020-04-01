@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <div class="row intro" style="color:#3f4d5a;font-style:italic;">
+{#    <div class="row intro" style="color:#3f4d5a;font-style:italic;">
         Doormiddel van de VarnishPurge plugin kan je pagina's uit de cache halen (refreshen). <br><br>
         In het invoerveld hieronder geeft je de url van de pagina die je wenst te clearen in volgens één van volgende notaties, en klik op de "Purge now!"-knop:<br>
         <b>https://mijndomein.be/nl/pagina/veel-gestelde-vragen</b><br>
@@ -13,6 +13,10 @@
         <b>/nl/pagina/veel-gestelde-vragen</b><br><br>
 
         Vervolgens zouden je aanpassingen zichtbaar moeten worden wanneer je refresht of terug naar die pagina navigeert!<br><br>
+    </div>#}
+
+    <div class="row intro" style="color:#3f4d5a;font-style:italic;">
+    Om een pagina uit de cache te halen, copy-paste hieronder de volledige url en klik op "clear cache".
     </div>
 
     <form method="post" action="varnishpurge/purge" accept-charset="UTF-8">
@@ -20,7 +24,7 @@
         <label for="url">URL to purge:</label><br/>
         <input id="url" type="text" name="url" value="" style="width:400px;"><br/><br/>
 
-        <input type="submit" value="Purge now!" style="float:left;">
+        <input type="submit" value="Clear cache" style="float:left;">
         <div class="row notification" style="float:left;color:#223399;font-style:italic;margin-left:15px;font-weight:bold;margin-bottom:15px;">
             {{  craft.app.request.getQueryParam('notice') }}
         </div>
