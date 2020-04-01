@@ -9,7 +9,6 @@ use VarnishAdmin\VarnishAdminSocket;
 
 class VarnishPurgeController extends Controller
 {
-
     public function actionIndex()
     {
         $ip = \GlueAgency\VarnishPurge\Plugin::getInstance()->settings->ip;
@@ -27,6 +26,6 @@ class VarnishPurgeController extends Controller
 
         Craft::$app->session->setFlash('notice',"URL purge complete: ".$_POST['url']);
 
-        $this->redirect(Craft::$app->getRequest()->referrer);
+        $this->redirect(Craft::$app->getRequest()->referrer."?notice=".urlencode("URL purge complete:".$_POST['url']));
     }
 }
