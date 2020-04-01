@@ -16,13 +16,31 @@ class VarnishPurgeController extends Controller
         $version = \GlueAgency\VarnishPurge\Plugin::getInstance()->settings->version;
         $secret = \GlueAgency\VarnishPurge\Plugin::getInstance()->settings->secret;
 
-        //$varnish = new VarnishAdminSocket($ip, $port, $version);
-        //if(!empty($secret)){
-        //    $varnish->setSecret($secret);
-        //}
-        //$varnish->connect();
-        //$varnish->purgeUrl($_POST['url']);
-        //$varnish->quit();
+        $varnish = new VarnishAdminSocket($ip, $port, $version);
+        if(!empty($secret)){
+            $varnish->setSecret($secret);
+        }
+
+        $url = $_POST['url'];
+        $url = trim($url);
+
+        if (strpos($url, '//') === 0) {
+            $url = str_replace("//","https://",$url);
+        }
+
+        if (strpos($url, 'http') !== 0 && strpos($url, '/') !== 0) {
+            $url = "https://".$url;
+        }
+
+        $path = parse_url($url, PHP_URL_PATH);
+
+        if($path === NULL){
+            $path = "/";
+        }
+
+        $varnish->connect();
+        $varnish->purgeUrl($path);
+        $varnish->quit();
 
         Craft::$app->session->setFlash('notice',"URL purge complete: ".$_POST['url']);
 
