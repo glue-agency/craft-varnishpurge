@@ -39,6 +39,7 @@ class VarnishPurgeController extends Controller
         }
 
         $msg = urlencode("URL purge complete: ".$_POST['url']);
+        
         try{
             $varnish->connect();
             $varnish->purgeUrl($path);
