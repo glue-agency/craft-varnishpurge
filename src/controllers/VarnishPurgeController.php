@@ -51,6 +51,6 @@ class VarnishPurgeController extends Controller
             Craft::$app->session->setFlash('error',$msg);
         }
 
-        $this->redirect("/admin/varnishpurge?notice=".$msg);
+        $this->redirect("varnishpurge?notice=".$msg);
     }
 }
