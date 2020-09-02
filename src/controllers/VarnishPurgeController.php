@@ -38,12 +38,19 @@ class VarnishPurgeController extends Controller
             $path = "/";
         }
 
-        $varnish->connect();
-        $varnish->purgeUrl($path);
-        $varnish->quit();
+        $msg = urlencode("URL purge complete: ".$_POST['url']);
+        
+        try{
+            $varnish->connect();
+            $varnish->purgeUrl($path);
+            $varnish->quit();
 
-        Craft::$app->session->setFlash('notice',"URL purge complete: ".$_POST['url']);
+            Craft::$app->session->setFlash('notice',$msg);
+        }catch (\Exception $exception){
+            $msg = "something went wrong: ".$exception->getMessage();
+            Craft::$app->session->setFlash('error',$msg);
+        }
 
-        $this->redirect("/admin/varnishpurge?notice=".urlencode("URL purge complete: ".$_POST['url']));
+        $this->redirect("/admin/varnishpurge?notice=".$msg);
     }
 }
