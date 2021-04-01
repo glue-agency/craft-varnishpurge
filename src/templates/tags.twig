@@ -1,0 +1,25 @@
+{% requirePermission 'varnishpurge:tags' %}
+
+{% extends "varnishpurge/_layouts" %}
+{% import '_includes/forms' as forms %}
+
+{% set title = "Purge Varnish cache"|t('varnishpurge') %}
+
+{% set selectedTab = 'tags' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+    <input type="hidden" name="action" value="varnishpurge/purge/tags">
+
+    {{ forms.textareaField({
+        label: "Tags to purge" | t('varnishpurge'),
+        rows: 5,
+        instructions: 'Comma seperated list of tags to purge.' | t('varnishpurge'),
+        placeholder: 'zip:9000,zip:9050,id:47920',
+        name: 'tags',
+    }) }}
+
+    <div class="buttons">
+        <input type="submit" class="btn submit" value="{{ 'Clear cache' | t('varnishpurge') }}">
+    </div>
+{% endblock %}

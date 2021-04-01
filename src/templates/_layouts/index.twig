@@ -1,0 +1,17 @@
+{% extends "_layouts/cp" %}
+
+{% set tabs = {
+    url: { label: 'Url' | t('varnishpurge'), url: url('varnishpurge') },
+} %}
+
+{% if currentUser.can('varnishpurge:tags') %}
+    {% set tabs = tabs|merge(
+        {
+            tags: { label: 'Tags' | t('varnishpurge'), url: url('varnishpurge/tags'), permission: 'varnishpurge:tags'
+        },
+        }) %}
+{% endif %}
+
+{% block submitButton %}
+    {# Leave this empty to not have a Save button on each tab. #}
+{% endblock %}

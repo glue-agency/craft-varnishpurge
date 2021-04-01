@@ -1,0 +1,30 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.autosuggestField({
+    first: true,
+    label: "Varnish server IP",
+    name: 'ip',
+    value: settings.ip,
+    suggestEnvVars: true
+}) }}
+
+{{ forms.autosuggestField({
+    label: "Varnish server PORT",
+    name: 'port',
+    value: settings.port,
+    suggestEnvVars: true
+}) }}
+
+{{ forms.autosuggestField({
+    label: "Varnish server VERSION",
+    name: 'version',
+    value: settings.version,
+    suggestEnvVars: true
+}) }}
+
+{{ forms.autosuggestField({
+    label: "Varnish server SECRET",
+    name: 'secret',
+    value: settings.secret,
+    suggestEnvVars: true
+}) }}
