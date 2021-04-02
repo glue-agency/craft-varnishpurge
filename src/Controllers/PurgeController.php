@@ -80,8 +80,6 @@ class PurgeController extends Controller
         // convert to array
         $tags = explode(',', $tags);
 
-        Craft::dd($tags);
-
         try {
             $this->varnish->connect();
             $this->varnish->purge('obj.http.X-Cache-Tags' . ' ~ ' . implode('|', $tags));
@@ -90,7 +88,6 @@ class PurgeController extends Controller
             Craft::$app->session->setFlash('cp-notice', count($tags) . ' tags purged.');
         } catch(Exception $e) {
             Craft::$app->session->setFlash('cp-error', 'Tag purge Failed');
-            Craft::dd($e);
         }
 
         return $this->redirect('/admin/varnishpurge/tags');
