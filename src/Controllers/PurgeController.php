@@ -32,8 +32,14 @@ class PurgeController extends Controller
     {
         $this->requirePostRequest();
 
-        $url = Craft::$app->request->getBodyParam('url');
-        $url = trim($url);
+        $purgeall = Craft::$app->request->getBodyParam('purgeall');
+
+        $originalUrl = Craft::$app->request->getBodyParam('url');
+        $url = trim($originalUrl);
+
+        if ($purgeall != '1') {
+            $url .= "$";
+        }
 
         if(strpos($url, '//') === 0) {
             $url = str_replace("//", "https://", $url);
@@ -54,7 +60,7 @@ class PurgeController extends Controller
             $this->varnish->purgeUrl($path);
             $this->varnish->quit();
 
-            Craft::$app->session->setFlash('cp-notice', "{$url} purged");
+            Craft::$app->session->setFlash('cp-notice', "{$originalUrl} purged");
         } catch(Exception $e) {
             Craft::$app->session->setFlash('cp-error', 'URL purge Failed');
         }

@@ -16,6 +16,14 @@
         name: 'url',
     }) }}
 
+    {{ forms.checkboxField({
+        label: 'Purge all sub-pages.'|t('varnishpurge'),
+        name: 'purgeall',
+        value: 1,
+        checked: false,
+        warning: 'The varnish cache of **ALL** the subsequent pages will also be purged and rebuild.<br>**Checking this box will result in a higher server load that could cause the website to fail**.'|t('varnishpurge'),
+    }) }}
+
     <div class="buttons">
         <input type="submit" class="btn submit" value="{{ 'Clear cache' | t('varnishpurge') }}">
     </div>
