@@ -11,7 +11,7 @@ class Settings extends Model
     public $version = '5.0.0';
     public $secret = '';
 
-    public function rules()
+    public function rules(): array
     {
         return [
             [['ip', 'port', 'version'], 'required'],

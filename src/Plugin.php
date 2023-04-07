@@ -10,18 +10,19 @@ use yii\base\Event;
 use craft\web\UrlManager;
 use craft\events\RegisterUrlRulesEvent;
 use Craft;
+use craft\base\Model;
 
 class Plugin extends \craft\base\Plugin
 {
     public $controllerNamespace = '\GlueAgency\VarnishPurge\Controllers';
-    public $hasCpSettings = true;
-    public $hasCpSection = true;
+    public bool $hasCpSettings = true;
+    public bool $hasCpSection = true;
 
     public $controllerMap = [
         'purge' => PurgeController::class,
     ];
 
-    public function init()
+    public function init(): void
     {
         Craft::setAlias('@/GlueAgency/VarnishPurge', __DIR__);
 
@@ -49,12 +50,12 @@ class Plugin extends \craft\base\Plugin
         );
     }
 
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?Model
     {
         return new Settings();
     }
 
-    protected function settingsHtml()
+    protected function settingsHtml(): ?string
     {
         return \Craft::$app->getView()->renderTemplate('varnishpurge/_settings', [
             'settings' => $this->getSettings()

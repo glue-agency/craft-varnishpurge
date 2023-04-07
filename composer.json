@@ -11,7 +11,7 @@
     ],
     "require": {
         "jeslopcru/varnishadmin": "dev-master#825c2693ca1b88414f111868d2cf0781fc0484de",
-        "craftcms/cms": "^3.0.0"
+        "craftcms/cms": "^4.0.0"
     },
     "autoload": {
         "psr-4": {
