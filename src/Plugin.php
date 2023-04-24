@@ -41,10 +41,13 @@ class Plugin extends \craft\base\Plugin
             UserPermissions::class,
             UserPermissions::EVENT_REGISTER_PERMISSIONS,
             function (RegisterUserPermissionsEvent $event) {
-                $event->permissions[Craft::t('varnishpurge', 'VarnishPurge')] = [
-                    'varnishpurge:tags' => [
-                        'label' => Craft::t('varnishpurge', 'Purge tags'),
-                    ],
+                $event->permissions[] = [
+                    'heading' => 'VarnishPurge',
+                    'permissions' => [
+                        'varnishpurge:tags' => [
+                            'label' => Craft::t('varnishpurge', 'Purge tags'),
+                        ],
+                    ]
                 ];
             }
         );
