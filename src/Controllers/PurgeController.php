@@ -13,7 +13,7 @@ class PurgeController extends Controller
 
     protected $varnish;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
