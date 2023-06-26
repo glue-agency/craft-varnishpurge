@@ -13,10 +13,14 @@ use craft\web\UrlManager;
 use Exception;
 use GlueAgency\VarnishPurge\Controllers\PurgeController;
 use GlueAgency\VarnishPurge\Models\Settings;
+use VarnishAdmin\VarnishAdminSocket;
 use yii\base\Event;
 
 class Plugin extends \craft\base\Plugin
 {
+
+    protected $varnish;
+
     public $controllerNamespace = '\GlueAgency\VarnishPurge\Controllers';
     public $hasCpSettings = true;
     public $hasCpSection = true;
@@ -69,7 +73,11 @@ class Plugin extends \craft\base\Plugin
                         $sectionsArray = explode(',', $sectionsString);
                         $sections = array_map('trim', $sectionsArray);
 
-                        if (!empty($entry->url) && in_array($sectionHandle, $sections)) {
+                        if (
+                            !empty($entry->url) &&
+                            in_array($sectionHandle, $sections) &&
+                            $_POST['siteId'] == $entry->siteId
+                        ) {
                             $url = $entry->url . "$";
                             $path = parse_url($url, PHP_URL_PATH);
 
@@ -78,12 +86,32 @@ class Plugin extends \craft\base\Plugin
                             }
 
                             try {
-                                $this->varnish->connect();
-                                $this->varnish->purgeUrl($path);
-                                $this->varnish->quit();
-                                Craft::$app->session->setFlash('cp-notice', "Varnish cache cleared");
+                                if (
+                                    isset(Plugin::getInstance()->settings->ip) &&
+                                    isset(Plugin::getInstance()->settings->port) &&
+                                    isset(Plugin::getInstance()->settings->version)
+                                ) {
+                                    try {
+                                        $this->varnish = new VarnishAdminSocket(
+                                            Craft::parseEnv(Plugin::getInstance()->settings->ip),
+                                            Craft::parseEnv(Plugin::getInstance()->settings->port),
+                                            Craft::parseEnv(Plugin::getInstance()->settings->version)
+                                        );
+                        
+                                        if(! empty($secret = Craft::parseEnv(Plugin::getInstance()->settings->secret))) {
+                                            $this->varnish->setSecret($secret);
+                                        }
+                        
+                                    } catch (Exception $e) {}
+                                }
+                                if (!empty($this->varnish)) {
+                                    $this->varnish->connect();
+                                    $this->varnish->purgeUrl($path);
+                                    $this->varnish->quit();
+                                    Craft::info('URL purge succeeded for '. $entry->url, __METHOD__);
+                                }
                             } catch(Exception $e) {
-                                Craft::$app->session->setFlash('cp-error', 'URL purge failed for '. $entry->url);
+                                Craft::error('URL purge failed for '. $entry->url, __METHOD__);
                             }
                         }
                     }
