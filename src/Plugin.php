@@ -66,9 +66,9 @@ class Plugin extends \craft\base\Plugin
 
                     if (
                         !ElementHelper::isDraftOrRevision($entry) &&
-                        App::env(Plugin::getInstance()->settings->ip) &&
-                        App::env(Plugin::getInstance()->settings->port) &&
-                        App::env(Plugin::getInstance()->settings->version)
+                        App::parseEnv(Plugin::getInstance()->settings->ip) &&
+                        App::parseEnv(Plugin::getInstance()->settings->port) &&
+                        App::parseEnv(Plugin::getInstance()->settings->version)
                     ) {
                         $sectionId = $entry->sectionId;
                         $sectionHandle = Craft::$app->sections->getSectionById($sectionId)->handle;
@@ -91,9 +91,9 @@ class Plugin extends \craft\base\Plugin
                             try {
                                 try {
                                     $this->varnish = new VarnishAdminSocket(
-                                        App::env(Plugin::getInstance()->settings->ip),
-                                        App::env(Plugin::getInstance()->settings->port),
-                                        App::env(Plugin::getInstance()->settings->version)
+                                        App::parseEnv(Plugin::getInstance()->settings->ip),
+                                        App::parseEnv(Plugin::getInstance()->settings->port),
+                                        App::parseEnv(Plugin::getInstance()->settings->version)
                                     );
 
                                     if(! empty($secret = App::env(Plugin::getInstance()->settings->secret))) {
