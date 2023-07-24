@@ -3,6 +3,7 @@
 namespace GlueAgency\VarnishPurge;
 
 use Craft;
+use craft\helpers\App;
 use craft\services\Elements;
 use craft\elements\Entry;
 use craft\events\RegisterUserPermissionsEvent;
@@ -64,7 +65,10 @@ class Plugin extends \craft\base\Plugin
                     $entry = $event->element;
 
                     if (
-                        !ElementHelper::isDraftOrRevision($entry)
+                        !ElementHelper::isDraftOrRevision($entry) &&
+                        App::env(Plugin::getInstance()->settings->ip) &&
+                        App::env(Plugin::getInstance()->settings->port) &&
+                        App::env(Plugin::getInstance()->settings->version)
                     ) {
                         $sectionId = $entry->sectionId;
                         $sectionHandle = Craft::$app->sections->getSectionById($sectionId)->handle;
@@ -75,8 +79,7 @@ class Plugin extends \craft\base\Plugin
 
                         if (
                             !empty($entry->url) &&
-                            in_array($sectionHandle, $sections) &&
-                            $_POST['siteId'] == $entry->siteId
+                            in_array($sectionHandle, $sections)
                         ) {
                             $url = $entry->url . "$";
                             $path = parse_url($url, PHP_URL_PATH);
@@ -86,24 +89,19 @@ class Plugin extends \craft\base\Plugin
                             }
 
                             try {
-                                if (
-                                    isset(Plugin::getInstance()->settings->ip) &&
-                                    isset(Plugin::getInstance()->settings->port) &&
-                                    isset(Plugin::getInstance()->settings->version)
-                                ) {
-                                    try {
-                                        $this->varnish = new VarnishAdminSocket(
-                                            Craft::parseEnv(Plugin::getInstance()->settings->ip),
-                                            Craft::parseEnv(Plugin::getInstance()->settings->port),
-                                            Craft::parseEnv(Plugin::getInstance()->settings->version)
-                                        );
-                        
-                                        if(! empty($secret = Craft::parseEnv(Plugin::getInstance()->settings->secret))) {
-                                            $this->varnish->setSecret($secret);
-                                        }
-                        
-                                    } catch (Exception $e) {}
-                                }
+                                try {
+                                    $this->varnish = new VarnishAdminSocket(
+                                        App::env(Plugin::getInstance()->settings->ip),
+                                        App::env(Plugin::getInstance()->settings->port),
+                                        App::env(Plugin::getInstance()->settings->version)
+                                    );
+
+                                    if(! empty($secret = App::env(Plugin::getInstance()->settings->secret))) {
+                                        $this->varnish->setSecret($secret);
+                                    }
+
+                                } catch (Exception $e) {}
+
                                 if (!empty($this->varnish)) {
                                     $this->varnish->connect();
                                     $this->varnish->purgeUrl($path);
