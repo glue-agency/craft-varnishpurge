@@ -10,6 +10,7 @@ class Settings extends Model
     public $port = 6082;
     public $version = '5.0.0';
     public $secret = '';
+    public $sections = '';
 
     public function rules(): array
     {
