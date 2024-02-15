@@ -3,6 +3,7 @@
 namespace GlueAgency\VarnishPurge;
 
 use Craft;
+use craft\base\Model;
 use craft\helpers\App;
 use craft\services\Elements;
 use craft\elements\Entry;
@@ -78,11 +79,11 @@ class Plugin extends \craft\base\Plugin
 
                         $sectionsString = Craft::parseEnv(Plugin::getInstance()->settings->sections);
                         $sectionsArray = explode(',', $sectionsString);
-                        $sections = array_map('trim', $sectionsArray);
+                        $sections = array_filter(array_map('trim', $sectionsArray));
 
                         if (
                             !empty($entry->url) &&
-                            in_array($sectionHandle, $sections)
+                            (empty($sections) || in_array($sectionHandle, $sections))
                         ) {
                             $url = $entry->url . "$";
                             $path = parse_url($url, PHP_URL_PATH);
