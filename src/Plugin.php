@@ -75,7 +75,7 @@ class Plugin extends \craft\base\Plugin
                         App::parseEnv(Plugin::getInstance()->settings->version)
                     ) {
                         $sectionId = $entry->sectionId;
-                        $sectionHandle = Craft::$app->sections->getSectionById($sectionId)->handle;
+                        $sectionHandle = Craft::$app->entries->getSectionById($sectionId)->handle;
 
                         $sectionsString = Craft::parseEnv(Plugin::getInstance()->settings->sections);
                         $sectionsArray = explode(',', $sectionsString);
