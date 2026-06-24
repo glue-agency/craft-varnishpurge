@@ -75,7 +75,18 @@ class Plugin extends \craft\base\Plugin
                         App::parseEnv(Plugin::getInstance()->settings->version)
                     ) {
                         $sectionId = $entry->sectionId;
-                        $sectionHandle = Craft::$app->entries->getSectionById($sectionId)->handle;
+
+                        // Nested entries (Matrix/CKEditor) have no section in Craft 5; skip them.
+                        if ($sectionId === null) {
+                            return;
+                        }
+
+                        $section = Craft::$app->entries->getSectionById($sectionId);
+                        if ($section === null) {
+                            return;
+                        }
+
+                        $sectionHandle = $section->handle;
 
                         $sectionsString = Craft::parseEnv(Plugin::getInstance()->settings->sections);
                         $sectionsArray = explode(',', $sectionsString);
